@@ -165,6 +165,29 @@
       </div>
     </div>
   </section>
+  <!-- ===== 天气显示 ===== -->
+<section id="weather">
+  <div class="container">
+    <h2 style="margin:0 0 16px;">实时天气</h2>
+    <p id="weather-info" style="color: var(--muted);">正在加载天气数据...</p >
+  </div>
+</section>
+
+<script>
+// 这里用 open-meteo 免费 API，获取北京的天气
+async function loadWeather() {
+  try {
+    const res = await fetch("https://api.open-meteo.com/v1/forecast?latitude=39.9042&longitude=116.4074&current_weather=true");
+    const data = await res.json();
+    const w = data.current_weather;
+    document.getElementById("weather-info").textContent =
+      `温度: ${w.temperature}°C，风速: ${w.windspeed} km/h`;
+  } catch (err) {
+    document.getElementById("weather-info").textContent = "天气信息获取失败 😢";
+  }
+}
+loadWeather();
+</script>
 
   <!-- ===== 联系我们 ===== -->
   <section id="contact">
@@ -220,3 +243,4 @@
   </script>
 </body>
 </html>
+
