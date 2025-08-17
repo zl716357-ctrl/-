@@ -174,14 +174,14 @@
 </section>
 
 <script>
-// 这里用 open-meteo 免费 API，获取北京的天气
+// 使用岳阳的经纬度
 async function loadWeather() {
   try {
-    const res = await fetch("https://api.open-meteo.com/v1/forecast?latitude=39.9042&longitude=116.4074&current_weather=true");
+    const res = await fetch("https://api.open-meteo.com/v1/forecast?latitude=29.3568&longitude=113.1291&current_weather=true");
     const data = await res.json();
     const w = data.current_weather;
     document.getElementById("weather-info").textContent =
-      `温度: ${w.temperature}°C，风速: ${w.windspeed} km/h`;
+      `岳阳现在温度: ${w.temperature}°C，风速: ${w.windspeed} km/h`;
   } catch (err) {
     document.getElementById("weather-info").textContent = "天气信息获取失败 😢";
   }
@@ -243,4 +243,5 @@ loadWeather();
   </script>
 </body>
 </html>
+
 
