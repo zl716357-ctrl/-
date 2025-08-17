@@ -165,21 +165,39 @@
       </div>
     </div>
   </section>
-  <!-- ===== 天气显示 ===== -->
+ <!-- ===== 天气显示 ===== -->
 <section id="weather">
   <div class="container">
     <h2 style="margin:0 0 16px;">实时天气</h2>
-    <p id="weather-info" style="color: var(--muted);">正在加载天气数据...</p >
+    <div id="weather-box" style="display:flex;align-items:center;gap:12px;padding:16px;background:var(--card);border-radius:14px;box-shadow:var(--shadow);max-width:300px;">
+      <span id="weather-icon" style="font-size:32px;">⛅</span>
+      <p id="weather-info" style="margin:0;color:var(--muted);">正在加载天气数据...</p >
+    </div>
   </div>
 </section>
 
 <script>
-// 使用岳阳的经纬度
+// 岳阳经纬度
 async function loadWeather() {
   try {
     const res = await fetch("https://api.open-meteo.com/v1/forecast?latitude=29.3568&longitude=113.1291&current_weather=true");
     const data = await res.json();
     const w = data.current_weather;
+
+    // 根据 weathercode 设置图标
+    const code = w.weathercode;
+    let icon = "🌤️"; // 默认：晴间多云
+    if ([0].includes(code)) icon = "☀️";        // 晴
+    else if ([1,2].includes(code)) icon = "⛅";  // 多云
+    else if ([3].includes(code)) icon = "☁️";   // 阴
+    else if ([45,48].includes(code)) icon = "🌫️"; // 雾
+    else if ([51,53,55,56,57].includes(code)) icon = "🌦️"; // 小雨/毛毛雨
+    else if ([61,63,65,66,67].includes(code)) icon = "🌧️"; // 雨
+    else if ([71,73,75,77].includes(code)) icon = "❄️";    // 雪
+    else if ([80,81,82].includes(code)) icon = "⛈️";      // 阵雨/雷雨
+    else if ([95,96,99].includes(code)) icon = "🌩️";      // 雷暴
+
+    document.getElementById("weather-icon").textContent = icon;
     document.getElementById("weather-info").textContent =
       `岳阳现在温度: ${w.temperature}°C，风速: ${w.windspeed} km/h`;
   } catch (err) {
@@ -243,5 +261,6 @@ loadWeather();
   </script>
 </body>
 </html>
+
 
 
